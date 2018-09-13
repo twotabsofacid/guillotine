@@ -1,0 +1,58 @@
+$default-min-breakpoint: $-sm-min;
+$default-max-breakpoint: $-lg-max;
+
+// Clamps the value of a property between two screen sizes.
+@mixin fluid-value(
+    $property,
+    $min-value,
+    $max-value,
+    $min-breakpoint: $default-min-breakpoint,
+    $max-breakpoint: $default-max-breakpoint) {
+
+    $diff-value: strip-unit($max-value - $min-value);
+    $diff-breakpoint: strip-unit($max-breakpoint - $min-breakpoint);
+
+    #{$property}: calc(#{$min-value} + #{$diff-value} *((100vw - #{$min-breakpoint}) / #{$diff-breakpoint}));
+
+    @media screen and (max-width: $min-breakpoint) {
+
+        #{$property}: $min-value;
+    }
+
+    @media screen and (min-width: $max-breakpoint) {
+
+        #{$property}: $max-value;
+    }
+}
+
+// Removes the unit of a value
+@function strip-unit($value) {
+
+    @if type-of($value) == 'number' and not unitless($value) {
+
+        @return $value / ($value * 0 + 1);
+    }
+
+    @return $value;
+}
+
+///
+/// Assign @content when passed viewport name is current viewport.
+///
+/// @param {String} $name [lg] - Viewport to target
+///
+@mixin viewport($name: lg) {
+    @if ($name == 'lg') {
+        @content;
+    }
+    @else if ($name == 'md') {
+        @media (max-width: $-md-max) {
+            @content;
+        }
+    }
+    @else {
+        @media (max-width: $-sm-max) {
+            @content;
+        }
+    }
+}

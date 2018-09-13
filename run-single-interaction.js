@@ -26,15 +26,22 @@ class Index {
                 time: socket.handshake.time,
                 userAgent: socket.handshake.headers['user-agent']
             };
-            // console.log(socket.handshake);
             this.userData.push(personalData);
-            console.log(this.userData);
+            // console.log(this.userData);
             socket.on('socket connected', () => {
                 io.to(socket.id).emit('connection stable', {
                     personalData: personalData,
                     userData: this.userData
                 });
-            })
+            });
+            socket.on('kill user', (data) => {
+                //console.log('we should kill', data);
+                this.banList.push(data);
+                let banTheseDevices = this.userData.filter(obj => {
+                    return obj.remoteAddress == data.remoteAddress;
+                });
+                console.log('we should ban these devices:', banTheseDevices);
+            });
             socket.on('disconnect', () => {
                 this.userCount--;
                 console.log(socket.id);

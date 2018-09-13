@@ -1,0 +1,18 @@
+html,
+body {
+    font-size: 18px;
+    font-family: helvetica;
+    line-height: 1.4;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-weight: bold;
+}
+@for $i from 1 through 6 {
+    h#{$i} {
+        @include fluid-value(font-size, 6/$i * 8px, 6/$i * 12px);
+    }
+}
