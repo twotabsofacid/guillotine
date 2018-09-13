@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node run-single-interaction.js",
     "js": "browserify src/js/app.js -o public/js/app.js && browserify src/js/head.js -o public/js/head.js",
     "watch:js": "onchange 'src/js/*.js' -- npm run js"
   },
