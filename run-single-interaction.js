@@ -15,7 +15,6 @@ class Index {
 			res.sendFile(__dirname, '/index.html');
 		});
 		io.on('connection', (socket) => {
-            this.userCount++;
             // save ip address & port
             let remoteAddress = socket.request.connection.remoteAddress;
             let remotePort = socket.request.connection.remotePort;
@@ -26,8 +25,17 @@ class Index {
                 time: socket.handshake.time,
                 userAgent: socket.handshake.headers['user-agent']
             };
+            // check if user is banned, and kick them off
+            let isUserBanned = this.banList.filter(obj => {
+                return obj.remoteAddress == personalData.remoteAddress;
+            });
+            // console.log(isUserBanned);
+            if (isUserBanned.length !== 0) {
+                io.to(socket.id).emit('you have been banned', false);
+            }
+            // Otherwise, do our thing
+            this.userCount++;
             this.userData.push(personalData);
-            // console.log(this.userData);
             socket.on('socket connected', () => {
                 io.to(socket.id).emit('connection stable', {
                     personalData: personalData,
@@ -35,12 +43,11 @@ class Index {
                 });
             });
             socket.on('kill user', (data) => {
-                //console.log('we should kill', data);
                 this.banList.push(data);
                 let banTheseDevices = this.userData.filter(obj => {
                     return obj.remoteAddress == data.remoteAddress;
                 });
-                console.log('we should ban these devices:', banTheseDevices);
+                io.to(data.id).emit('refresh');
             });
             socket.on('disconnect', () => {
                 this.userCount--;

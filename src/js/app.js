@@ -19,6 +19,9 @@ class App {
 		});
         socket.open();
         socket.emit('socket connected');
+        this.addSocketListeners();
+	}
+    addSocketListeners() {
         // Run once connection is stable,
         // to get all the info from the server
         socket.on('connection stable', (data) => {
@@ -37,7 +40,15 @@ class App {
                 this.userInfoElem.innerText = 'Sorry, you are the only user at the moment. Please refresh when the user count increases';
             }
         });
-	}
+        socket.on('you have been banned', (data) => {
+            console.log('should be banned');
+            socket.close();
+        });
+        socket.on('refresh', () => {
+            console.log('should reload');
+            document.location.reload();
+        });
+    }
     addListeners() {
         this.killBtnElem.addEventListener('click', this.killUser);
     }
