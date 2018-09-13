@@ -7,16 +7,18 @@ const io = require('socket.io')(http);
 
 class Index {
 	constructor() {
-		this.userData = [];
+        this.userData = [];
+        this.banList = [];
+        this.userCount = 0;
 		app.use(express.static('public'));
 		app.get('/', function(req, res){
 			res.sendFile(__dirname, '/index.html');
 		});
 		io.on('connection', (socket) => {
+            userCount++;
             // save ip address & port
             let remoteAddress = socket.request.connection.remoteAddress;
             let remotePort = socket.request.connection.remotePort;
-			console.log('a user connected', socket.id);
             // console.log(socket.handshake);
             this.userData.push({
                 id: socket.id,
@@ -30,6 +32,7 @@ class Index {
                 io.to(socket.id).emit('connection stable', this.userData);
             })
             socket.on('disconnect', () => {
+                userCount--;
                 console.log(socket.id);
                 this.userData = this.userData.filter(obj => {
                     return obj.id != socket.id;
