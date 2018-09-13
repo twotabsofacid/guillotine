@@ -15,24 +15,28 @@ class Index {
 			res.sendFile(__dirname, '/index.html');
 		});
 		io.on('connection', (socket) => {
-            userCount++;
+            this.userCount++;
             // save ip address & port
             let remoteAddress = socket.request.connection.remoteAddress;
             let remotePort = socket.request.connection.remotePort;
-            // console.log(socket.handshake);
-            this.userData.push({
+            let personalData = {
                 id: socket.id,
                 remoteAddress: remoteAddress,
                 remotePort: remotePort,
                 time: socket.handshake.time,
                 userAgent: socket.handshake.headers['user-agent']
-            });
+            };
+            // console.log(socket.handshake);
+            this.userData.push(personalData);
             console.log(this.userData);
             socket.on('socket connected', () => {
-                io.to(socket.id).emit('connection stable', this.userData);
+                io.to(socket.id).emit('connection stable', {
+                    personalData: personalData,
+                    userData: this.userData
+                });
             })
             socket.on('disconnect', () => {
-                userCount--;
+                this.userCount--;
                 console.log(socket.id);
                 this.userData = this.userData.filter(obj => {
                     return obj.id != socket.id;
