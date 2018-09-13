@@ -1,0 +1,21 @@
+{
+  "name": "single-interaction-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "js": "browserify src/js/app.js -o public/js/app.js && browserify src/js/head.js -o public/js/head.js",
+    "watch:js": "onchange 'src/js/*.js' -- npm run js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "onchange": "^4.1.0"
+  }
+}
