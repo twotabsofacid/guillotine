@@ -30,13 +30,17 @@
             left: 5%;
         }
     }
-    .user-information {
+    .user-information-container {
         position: absolute;
         bottom: 50vh;
         line-height: 1.2;
         width: 90%;
         left: 5%;
         color: $color-2;
+        .guillotine-wood {
+            position: relative;
+            z-index: 1001;
+        }
         .user-id {
             color: $color-1;
         }
