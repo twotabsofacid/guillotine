@@ -25,15 +25,15 @@ class GuillotineAnimation {
         });
         this.timeline.to(this.userDeviceText, 1, {
             ease: Power0.easeNone,
-            y: 800,
-            rotation: '80deg'
+            y: 400,
+            rotation: '-40deg'
         });
         this.timeline.pause();
     }
     onWindowScroll(e) {
         let userTextTop = this.userDeviceTextWrapper.getBoundingClientRect().top;
         let documentTop = document.body.getBoundingClientRect().top;
-        let percentageComplete = Utils.mapClamp(window.scrollY + this.blade.clientHeight, userTextTop - documentTop, userTextTop - documentTop + 600, 0, 1);
+        let percentageComplete = Utils.mapClamp(window.scrollY + this.blade.clientHeight - 100, userTextTop - documentTop, userTextTop - documentTop + 600, 0, 1);
         this.timeline.progress(percentageComplete);
     }
 }
