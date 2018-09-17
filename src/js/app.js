@@ -23,10 +23,10 @@ class App {
 		let ipPromise = new findIp();
 		ipPromise.then(ip => {
 			console.log('ip: ', ip);
+            socket.open();
+            socket.emit('socket connected', ip);
+            this.addSocketListeners();
 		});
-        socket.open();
-        socket.emit('socket connected');
-        this.addSocketListeners();
 	}
     addSocketListeners() {
         // Run once connection is stable,
@@ -53,12 +53,12 @@ class App {
         this.personalData = data.personalData;
         this.userData = data.userData;
         this.userData = this.userData.filter(obj => {
-            return obj.remoteAddress != this.personalData.remoteAddress;
+            return obj.ip != this.personalData.ip;
         });
         if (this.userData.length !== 0) {
             this.targetData = this.userData[Math.floor(Math.random() * this.userData.length)];
             console.log(this.targetData);
-            let string = `<span class="user-info-block user-id">User with ID ${this.targetData.id}</span> <span class="user-info-block user-ip">connected from IP address ${this.targetData.remoteAddress}</span> <span class="user-info-block user-time">at ${this.targetData.time}</span> <span class="user-info-block user-device"><span class="inner-text">using ${this.targetData.userAgent}</span></span>`;
+            let string = `<span class="user-info-block user-id">User with ID ${this.targetData.id}</span> <span class="user-info-block user-ip">connected from IP address ${this.targetData.ip}</span> <span class="user-info-block user-time">at ${this.targetData.time}</span> <span class="user-info-block user-device"><span class="inner-text">using ${this.targetData.userAgent}</span></span>`;
             this.userInfoElem.innerHTML = string;
             new guillotineAnimation();
         } else {
