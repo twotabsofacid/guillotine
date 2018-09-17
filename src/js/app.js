@@ -29,7 +29,7 @@ class App {
 		}, err => {
             console.log(err);
             noScroll.on();
-            this.deathScreen.querySelector('.death-text.killed').innerText = err;
+            this.deathScreen.querySelector('.death-text.killed').innerHTML = `${err}<br>Try in the latest Chrome or Firefox browser on a desktop computer`;
             this.deathScreen.style.display = 'flex';
         });
 	}
