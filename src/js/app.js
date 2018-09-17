@@ -1,5 +1,6 @@
 'use strict';
 
+const noScroll = require('no-scroll');
 const findIp = require('./find-ip');
 var socket = io({
     autoConnect: false
@@ -11,9 +12,12 @@ class App {
         this.userData = null;
         this.targetData = null;
         this.userInfoElem = document.getElementById('user-information');
-        this.killBtnElem = document.getElementById('kill-button');
+        // this.killBtnElem = document.getElementById('kill-button');
+        this.userCount = document.getElementById('user-count');
+        this.deathScreen = document.getElementById('death-screen');
         // Front end listeners
-        this.killUser = this.killUser.bind(this);
+        // this.killUser = this.killUser.bind(this);
+        this.onWindowScroll = this.onWindowScroll.bind(this);
 		let ipPromise = new findIp();
 		ipPromise.then(ip => {
 			console.log('ip: ', ip);
@@ -28,6 +32,9 @@ class App {
         socket.on('connection stable', (data) => {
             this.connectionStable(data);
         });
+        socket.on('user count update', (data) => {
+            this.onUserCountUpdate(data);
+        });
         socket.on('you have been banned', (data) => {
             this.banned(data);
         });
@@ -36,7 +43,8 @@ class App {
         });
     }
     addListeners() {
-        this.killBtnElem.addEventListener('click', this.killUser);
+        window.addEventListener('scroll', this.onWindowScroll);
+        // this.killBtnElem.addEventListener('click', this.killUser);
     }
     connectionStable(data) {
         this.addListeners();
@@ -51,16 +59,29 @@ class App {
             let string = `<span class="user-id">User with ID ${this.targetData.id}</span> <span class="user-ip">connected from IP address ${this.targetData.remoteAddress}</span> <span class="user-time">at ${this.targetData.time}</span> <span class="user-device">using ${this.targetData.userAgent}</span>`;
             this.userInfoElem.innerHTML = string;
         } else {
-            this.userInfoElem.innerText = 'Sorry, you are the only user at the moment. Please refresh when the user count increases';
+            this.userInfoElem.innerText = 'Sorry, you are the only unique IP at the moment. Please refresh when the user count increases.';
         }
+    }
+    onUserCountUpdate(data) {
+        this.userCount.innerText = data;
     }
     banned(data) {
         console.log('should be banned');
         socket.close();
+        noScroll.on();
+        this.deathScreen.style.display = 'flex';
     }
     refresh() {
+        window.scrollTo(0, 0);
         console.log('should reload');
         document.location.reload();
+    }
+    onWindowScroll(e) {
+        if (window.scrollY + window.innerHeight + 10 > document.body.offsetHeight) {
+            window.removeEventListener('scroll', this.onWindowScroll);
+            console.log('we should delete');
+            this.killUser();
+        }
     }
     killUser(e) {
         if (e) {

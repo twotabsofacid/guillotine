@@ -35,6 +35,7 @@ class Index {
             } else {
                 // Otherwise, do our thing
                 this.userCount++;
+                io.emit('user count update', this.userCount);
                 this.userData.push(personalData);
                 socket.on('socket connected', () => {
                     io.to(socket.id).emit('connection stable', {
@@ -54,6 +55,7 @@ class Index {
                 });
                 socket.on('disconnect', () => {
                     this.userCount--;
+                    io.emit('user count update', this.userCount);
                     this.userData = this.userData.filter(obj => {
                         return obj.id != socket.id;
                     });
