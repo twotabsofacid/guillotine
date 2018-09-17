@@ -10,6 +10,7 @@ var socket = io({
 
 class App {
 	constructor() {
+        console.log('what the fuck');
         this.personalData = null;
         this.userData = null;
         this.targetData = null;
@@ -21,12 +22,18 @@ class App {
         // this.killUser = this.killUser.bind(this);
         this.onWindowScroll = this.onWindowScroll.bind(this);
 		let ipPromise = new findIp();
+        console.log('what the fuuuuuuck');
 		ipPromise.then(ip => {
 			console.log('ip: ', ip);
             socket.open();
             socket.emit('socket connected', ip);
             this.addSocketListeners();
-		});
+		}, err => {
+            console.log(err);
+            noScroll.on();
+            this.deathScreen.querySelector('.death-text.killed').innerText = err;
+            this.deathScreen.style.display = 'flex';
+        });
 	}
     addSocketListeners() {
         // Run once connection is stable,
