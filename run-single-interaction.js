@@ -32,30 +32,33 @@ class Index {
             // console.log(isUserBanned);
             if (isUserBanned.length !== 0) {
                 io.to(socket.id).emit('you have been banned', false);
+            } else {
+                // Otherwise, do our thing
+                this.userCount++;
+                this.userData.push(personalData);
+                socket.on('socket connected', () => {
+                    io.to(socket.id).emit('connection stable', {
+                        personalData: personalData,
+                        userData: this.userData
+                    });
+                });
+                socket.on('kill user', (data) => {
+                    this.banList.push(data);
+                    let banTheseDevices = this.userData.filter(obj => {
+                        return obj.remoteAddress == data.remoteAddress;
+                    });
+                    for (let i = 0; i < banTheseDevices.length; i++) {
+                        console.log('we should be banning: ', banTheseDevices[i].id);
+                        io.to(banTheseDevices[i].id).emit('refresh');
+                    }
+                });
+                socket.on('disconnect', () => {
+                    this.userCount--;
+                    this.userData = this.userData.filter(obj => {
+                        return obj.id != socket.id;
+                    });
+                });
             }
-            // Otherwise, do our thing
-            this.userCount++;
-            this.userData.push(personalData);
-            socket.on('socket connected', () => {
-                io.to(socket.id).emit('connection stable', {
-                    personalData: personalData,
-                    userData: this.userData
-                });
-            });
-            socket.on('kill user', (data) => {
-                this.banList.push(data);
-                let banTheseDevices = this.userData.filter(obj => {
-                    return obj.remoteAddress == data.remoteAddress;
-                });
-                io.to(data.id).emit('refresh');
-            });
-            socket.on('disconnect', () => {
-                this.userCount--;
-                console.log(socket.id);
-                this.userData = this.userData.filter(obj => {
-                    return obj.id != socket.id;
-                });
-            });
 		});
 		http.listen(3000, () => {
 			console.log('listening on *:3000');

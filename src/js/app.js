@@ -66,8 +66,11 @@ class App {
         if (e) {
             e.preventDefault();
         }
-        socket.emit('kill user', this.targetData);
-        this.refresh();
+        if (this.targetData) {
+            socket.emit('kill user', this.targetData);
+            console.log('should be killing this guy', this.targetData);
+            this.refresh();
+        }
     }
 }
 
