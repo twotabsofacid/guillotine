@@ -10,7 +10,6 @@ var socket = io({
 
 class App {
 	constructor() {
-        console.log('what the fuck');
         this.personalData = null;
         this.userData = null;
         this.targetData = null;
@@ -22,7 +21,6 @@ class App {
         // this.killUser = this.killUser.bind(this);
         this.onWindowScroll = this.onWindowScroll.bind(this);
 		let ipPromise = new findIp();
-        console.log('what the fuuuuuuck');
 		ipPromise.then(ip => {
 			console.log('ip: ', ip);
             socket.open();
