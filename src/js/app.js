@@ -1,7 +1,15 @@
 'use strict';
 
+// Greensock
+require('tween-lite');
+require('ease-pack');
+require('css-plugin');
+require('scroll-to-plugin');
+require('timeline-lite');
+// Other modules
 const noScroll = require('no-scroll');
 const findIp = require('./find-ip');
+const guillotineAnimation = require('./guillotine-animation');
 var socket = io({
     autoConnect: false
 });
@@ -56,8 +64,9 @@ class App {
         if (this.userData.length !== 0) {
             this.targetData = this.userData[Math.floor(Math.random() * this.userData.length)];
             console.log(this.targetData);
-            let string = `<span class="user-id">User with ID ${this.targetData.id}</span> <span class="user-ip">connected from IP address ${this.targetData.remoteAddress}</span> <span class="user-time">at ${this.targetData.time}</span> <span class="user-device">using ${this.targetData.userAgent}</span>`;
+            let string = `<span class="user-info-block user-id">User with ID ${this.targetData.id}</span> <span class="user-info-block user-ip">connected from IP address ${this.targetData.remoteAddress}</span> <span class="user-info-block user-time">at ${this.targetData.time}</span> <span class="user-info-block user-device"><span class="inner-text">using ${this.targetData.userAgent}</span></span>`;
             this.userInfoElem.innerHTML = string;
+            new guillotineAnimation();
         } else {
             this.userInfoElem.innerText = 'Sorry, you are the only unique IP at the moment. Please refresh when the user count increases.';
         }

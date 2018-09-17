@@ -42,6 +42,9 @@
             position: relative;
             z-index: 1001;
         }
+        .user-info-block {
+            display: block;
+        }
         .user-id {
             color: $color-1;
         }
@@ -53,6 +56,12 @@
         }
         .user-device {
             color: $color-4;
+            position: relative;
+            .inner-text {
+                display: block;
+                position: relative;
+                z-index: 10002;
+            }
         }
     }
     .death-screen {
