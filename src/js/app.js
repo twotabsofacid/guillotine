@@ -1,11 +1,5 @@
 'use strict';
 
-// Greensock
-require('tween-lite');
-require('ease-pack');
-require('css-plugin');
-require('scroll-to-plugin');
-require('timeline-lite');
 // Other modules
 const noScroll = require('no-scroll');
 const findIp = require('./find-ip');

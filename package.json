@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
-    "gsap": "^2.0.2",
     "no-scroll": "^2.1.1",
     "socket.io": "^2.1.1"
   },
@@ -25,12 +24,5 @@
     "node-sass": "^4.9.3",
     "onchange": "^4.1.0",
     "parallelshell": "^3.0.2"
-  },
-  "browser": {
-    "tween-lite": "./node_modules/gsap/src/uncompressed/TweenLite.js",
-    "timeline-lite": "./node_modules/gsap/src/uncompressed/TimelineLite.js",
-    "ease-pack": "./node_modules/gsap/src/uncompressed/easing/EasePack.js",
-    "css-plugin": "./node_modules/gsap/src/uncompressed/plugins/CssPlugin.js",
-    "scroll-to-plugin": "./node_modules/gsap/src/uncompressed/plugins/ScrollToPlugin.js"
   }
 }
