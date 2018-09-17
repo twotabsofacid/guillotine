@@ -20,16 +20,22 @@
     .guillotine-icon {
         position: fixed;
         z-index: 1000;
-        height: 35vh;
         width: 100%;
         top: 0;
         left: 0;
         background-color: #666;
+        .guillotine-svg {
+            width: 90%;
+            position: absolute;
+            left: 5%;
+        }
     }
     .user-information {
         position: absolute;
         bottom: 50vh;
         line-height: 1.2;
+        width: 90%;
+        left: 5%;
         color: $color-2;
         .user-id {
             color: $color-1;
