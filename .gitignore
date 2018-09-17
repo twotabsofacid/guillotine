@@ -3,5 +3,6 @@
 node_modules
 npm-debug.log
 # project specific
-public/js
+public/js/app.js
+public/js/head.js
 public/css
